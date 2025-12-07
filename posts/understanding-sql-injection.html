@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Understanding SQL Injection Attacks - A comprehensive guide">
+    <title>Understanding SQL Injection Attacks | RD-Tarun</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="container">
+                <h1 class="logo">RD-Tarun</h1>
+                <ul class="nav-links">
+                    <li><a href="../index.html">Home</a></li>
+                    <li><a href="../blogs.html">Blogs</a></li>
+                    <li><a href="../about.html">About</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="post-header">
+            <div class="container">
+                <h1 class="post-title">Understanding SQL Injection Attacks</h1>
+                <div class="post-meta">
+                    <span class="category cybersecurity">Cybersecurity</span>
+                    <span class="date">December 2024</span>
+                </div>
+            </div>
+        </section>
+
+        <article class="post-content">
+            <h2>Introduction</h2>
+            <p>
+                SQL injection (SQLi) remains one of the most prevalent and dangerous web application 
+                vulnerabilities. Despite being well-known for decades, it continues to appear in the 
+                OWASP Top 10 and affects countless applications. In this comprehensive guide, we'll 
+                explore how SQL injection attacks work, their impact, and how to prevent them.
+            </p>
+
+            <h2>What is SQL Injection?</h2>
+            <p>
+                SQL injection is a code injection technique that exploits security vulnerabilities in 
+                an application's database layer. Attackers can insert malicious SQL statements into 
+                entry fields, which are then executed by the database. This can lead to unauthorized 
+                access to sensitive data, data manipulation, or even complete system compromise.
+            </p>
+
+            <h2>How SQL Injection Works</h2>
+            <p>Consider this vulnerable code example:</p>
+            <pre><code>String query = "SELECT * FROM users WHERE username='" + username + "' AND password='" + password + "'";
+ResultSet results = statement.executeQuery(query);</code></pre>
+
+            <p>
+                If an attacker inputs <code>' OR '1'='1</code> as the username, the query becomes:
+            </p>
+            <pre><code>SELECT * FROM users WHERE username='' OR '1'='1' AND password=''</code></pre>
+
+            <p>
+                Since '1'='1' is always true, this query returns all users, potentially allowing 
+                unauthorized access.
+            </p>
+
+            <h2>Types of SQL Injection</h2>
+            
+            <h3>1. Classic SQL Injection</h3>
+            <p>
+                The attacker directly manipulates the SQL query through user input fields. Results 
+                are visible in the application's response.
+            </p>
+
+            <h3>2. Blind SQL Injection</h3>
+            <p>
+                The application doesn't return database errors or data directly. Attackers infer 
+                information by observing application behavior and response times.
+            </p>
+
+            <h3>3. Time-based Blind SQL Injection</h3>
+            <p>
+                Attackers use database time delay functions to determine if queries are successful 
+                based on response times.
+            </p>
+
+            <h2>Impact of SQL Injection</h2>
+            <ul>
+                <li><strong>Data Breach:</strong> Unauthorized access to sensitive information including 
+                    user credentials, personal data, and financial records</li>
+                <li><strong>Data Manipulation:</strong> Modification or deletion of critical data</li>
+                <li><strong>Authentication Bypass:</strong> Gaining unauthorized access to user accounts 
+                    or administrative functions</li>
+                <li><strong>Remote Code Execution:</strong> In some cases, attackers can execute 
+                    operating system commands</li>
+                <li><strong>Denial of Service:</strong> Database operations can be disrupted or 
+                    databases can be dropped entirely</li>
+            </ul>
+
+            <h2>Prevention Techniques</h2>
+
+            <h3>1. Parameterized Queries (Prepared Statements)</h3>
+            <p>The most effective defense against SQL injection:</p>
+            <pre><code>String query = "SELECT * FROM users WHERE username=? AND password=?";
+PreparedStatement pstmt = connection.prepareStatement(query);
+pstmt.setString(1, username);
+pstmt.setString(2, password);
+ResultSet results = pstmt.executeQuery();</code></pre>
+
+            <h3>2. Input Validation</h3>
+            <p>
+                Implement strict input validation on all user-supplied data. Use allowlists for 
+                expected values and reject any input that doesn't conform to expected patterns.
+            </p>
+
+            <h3>3. Stored Procedures</h3>
+            <p>
+                When implemented correctly, stored procedures can provide protection against SQL 
+                injection by separating code from data.
+            </p>
+
+            <h3>4. Least Privilege Principle</h3>
+            <p>
+                Database accounts used by the application should have minimal necessary privileges. 
+                Avoid using administrative accounts for regular operations.
+            </p>
+
+            <h3>5. Web Application Firewall (WAF)</h3>
+            <p>
+                Deploy a WAF to detect and block SQL injection attempts. While not a complete 
+                solution, it provides an additional security layer.
+            </p>
+
+            <h2>Testing for SQL Injection</h2>
+            <p>Security professionals can test for SQL injection vulnerabilities using:</p>
+            <ul>
+                <li>Manual testing with special characters like single quotes ('), double quotes ("), 
+                    semicolons (;), and SQL keywords</li>
+                <li>Automated scanning tools like SQLMap, Burp Suite, or OWASP ZAP</li>
+                <li>Static code analysis tools to identify vulnerable code patterns</li>
+            </ul>
+
+            <h2>Conclusion</h2>
+            <p>
+                SQL injection remains a critical threat to web applications. Understanding how these 
+                attacks work and implementing proper defenses is essential for any developer or 
+                security professional. Always use parameterized queries, validate input, apply the 
+                principle of least privilege, and regularly test your applications for vulnerabilities.
+            </p>
+
+            <p>
+                Remember: Security is not a one-time implementation but an ongoing process. Stay 
+                updated with the latest security practices and continuously improve your application's 
+                defenses.
+            </p>
+
+            <div class="view-all">
+                <a href="../blogs.html" class="btn">← Back to All Posts</a>
+            </div>
+        </article>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 RD-Tarun. All rights reserved.</p>
+            <p>Cybersecurity Research & Analysis</p>
+        </div>
+    </footer>
+</body>
+</html>

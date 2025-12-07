@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Network Traffic Analysis with Wireshark - A practical guide">
+    <title>Network Traffic Analysis with Wireshark | RD-Tarun</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="container">
+                <h1 class="logo">RD-Tarun</h1>
+                <ul class="nav-links">
+                    <li><a href="../index.html">Home</a></li>
+                    <li><a href="../blogs.html">Blogs</a></li>
+                    <li><a href="../about.html">About</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="post-header">
+            <div class="container">
+                <h1 class="post-title">Network Traffic Analysis with Wireshark</h1>
+                <div class="post-meta">
+                    <span class="category network">Network Analysis</span>
+                    <span class="date">November 2024</span>
+                </div>
+            </div>
+        </section>
+
+        <article class="post-content">
+            <h2>Introduction</h2>
+            <p>
+                Network traffic analysis is a critical skill for cybersecurity professionals. Whether 
+                you're investigating a security incident, troubleshooting network issues, or hunting 
+                for threats, understanding how to capture and analyze network packets is essential. 
+                In this guide, we'll explore how to use Wireshark, the world's most popular network 
+                protocol analyzer, to identify suspicious activities and potential security breaches.
+            </p>
+
+            <h2>What is Wireshark?</h2>
+            <p>
+                Wireshark is a free, open-source packet analyzer that allows you to capture and 
+                interactively browse network traffic. It provides deep inspection of hundreds of 
+                protocols and is available for Windows, Linux, macOS, and other platforms.
+            </p>
+
+            <h2>Getting Started with Wireshark</h2>
+
+            <h3>Installation</h3>
+            <p>
+                Download Wireshark from the official website (wireshark.org) and install it on your 
+                system. On Linux, you can typically install it using your package manager:
+            </p>
+            <pre><code>sudo apt-get install wireshark  # Debian/Ubuntu
+sudo yum install wireshark      # RedHat/CentOS</code></pre>
+
+            <h3>Basic Capture</h3>
+            <p>To start capturing network traffic:</p>
+            <ol>
+                <li>Launch Wireshark with appropriate privileges</li>
+                <li>Select the network interface you want to monitor</li>
+                <li>Click the shark fin icon to start capturing</li>
+                <li>Perform the network activity you want to analyze</li>
+                <li>Click the red square to stop capturing</li>
+            </ol>
+
+            <h2>Understanding the Wireshark Interface</h2>
+
+            <h3>Three Main Panes</h3>
+            <ul>
+                <li><strong>Packet List Pane:</strong> Displays all captured packets with summary 
+                    information</li>
+                <li><strong>Packet Details Pane:</strong> Shows protocol hierarchy and details of 
+                    the selected packet</li>
+                <li><strong>Packet Bytes Pane:</strong> Displays raw packet data in hexadecimal and 
+                    ASCII</li>
+            </ul>
+
+            <h2>Essential Display Filters</h2>
+            <p>
+                Wireshark's display filters are powerful tools for focusing on specific traffic. 
+                Here are some essential filters:
+            </p>
+
+            <h3>Protocol Filters</h3>
+            <pre><code>http           # Show only HTTP traffic
+dns            # Show only DNS queries
+tcp            # Show only TCP packets
+udp            # Show only UDP packets
+icmp           # Show only ICMP packets</code></pre>
+
+            <h3>IP Address Filters</h3>
+            <pre><code>ip.addr == 192.168.1.100              # Traffic to/from specific IP
+ip.src == 192.168.1.100               # Traffic from specific IP
+ip.dst == 192.168.1.100               # Traffic to specific IP
+ip.addr == 192.168.1.0/24             # Traffic to/from subnet</code></pre>
+
+            <h3>Port Filters</h3>
+            <pre><code>tcp.port == 80                        # HTTP traffic
+tcp.port == 443                       # HTTPS traffic
+tcp.port == 22                        # SSH traffic
+udp.port == 53                        # DNS traffic</code></pre>
+
+            <h3>Combination Filters</h3>
+            <pre><code>ip.addr == 192.168.1.100 && tcp.port == 80
+http && ip.src == 10.0.0.1
+tcp.flags.syn == 1 && tcp.flags.ack == 0  # SYN packets</code></pre>
+
+            <h2>Detecting Suspicious Activities</h2>
+
+            <h3>1. Port Scanning Detection</h3>
+            <p>Look for patterns indicating port scanning:</p>
+            <pre><code>tcp.flags.syn == 1 && tcp.flags.ack == 0</code></pre>
+            <p>
+                A single source IP attempting connections to multiple ports on a target system in 
+                rapid succession is indicative of port scanning.
+            </p>
+
+            <h3>2. ARP Spoofing</h3>
+            <p>Detect potential ARP spoofing attacks:</p>
+            <pre><code>arp.duplicate-address-detected</code></pre>
+            <p>
+                Multiple MAC addresses claiming the same IP address could indicate an ARP spoofing 
+                attack.
+            </p>
+
+            <h3>3. DNS Tunneling</h3>
+            <p>Identify potential DNS tunneling:</p>
+            <pre><code>dns && dns.qry.name.len > 50</code></pre>
+            <p>
+                Unusually long DNS queries or excessive DNS traffic to a single domain may indicate 
+                data exfiltration via DNS tunneling.
+            </p>
+
+            <h3>4. Unusual Protocols or Ports</h3>
+            <p>Filter for uncommon protocols or ports:</p>
+            <pre><code>!(tcp.port == 80 || tcp.port == 443 || tcp.port == 22)</code></pre>
+            <p>
+                Traffic on unusual ports should be investigated, especially if originating from 
+                internal systems.
+            </p>
+
+            <h2>Analyzing HTTP Traffic</h2>
+            <p>HTTP traffic analysis can reveal:</p>
+
+            <h3>Extracting HTTP Objects</h3>
+            <ul>
+                <li>Navigate to File → Export Objects → HTTP</li>
+                <li>Review downloaded files, images, and scripts</li>
+                <li>Identify potentially malicious downloads</li>
+            </ul>
+
+            <h3>Viewing HTTP Requests and Responses</h3>
+            <pre><code>http.request.method == "GET"
+http.request.method == "POST"
+http.response.code == 200
+http.response.code == 404</code></pre>
+
+            <h3>Following HTTP Streams</h3>
+            <p>
+                Right-click on a packet and select "Follow → HTTP Stream" to see the complete 
+                conversation between client and server.
+            </p>
+
+            <h2>Advanced Analysis Techniques</h2>
+
+            <h3>1. TCP Stream Analysis</h3>
+            <p>
+                Follow TCP streams to reconstruct entire conversations:
+            </p>
+            <ul>
+                <li>Right-click on a TCP packet</li>
+                <li>Select "Follow → TCP Stream"</li>
+                <li>Analyze the complete data exchange</li>
+            </ul>
+
+            <h3>2. Statistical Analysis</h3>
+            <p>Wireshark provides various statistics tools:</p>
+            <ul>
+                <li><strong>Protocol Hierarchy:</strong> Statistics → Protocol Hierarchy</li>
+                <li><strong>Conversations:</strong> Statistics → Conversations</li>
+                <li><strong>Endpoints:</strong> Statistics → Endpoints</li>
+                <li><strong>I/O Graphs:</strong> Statistics → I/O Graphs</li>
+            </ul>
+
+            <h3>3. Expert Information</h3>
+            <p>
+                Access Analyze → Expert Information to see Wireshark's automated analysis of 
+                potential issues:
+            </p>
+            <ul>
+                <li>Errors (red)</li>
+                <li>Warnings (yellow)</li>
+                <li>Notes (cyan)</li>
+                <li>Chats (blue)</li>
+            </ul>
+
+            <h2>Real-World Example: Detecting a Malware Infection</h2>
+            <p>
+                Here's a step-by-step approach to analyzing a potential malware infection:
+            </p>
+
+            <ol>
+                <li><strong>Identify the infected host:</strong> Look for systems making unusual 
+                    outbound connections</li>
+                <li><strong>Filter traffic:</strong> Use <code>ip.src == [infected_host]</code> to 
+                    focus on traffic from the suspect machine</li>
+                <li><strong>Check DNS queries:</strong> Look for suspicious domains or excessive 
+                    DNS activity</li>
+                <li><strong>Analyze HTTP/HTTPS traffic:</strong> Identify connections to known 
+                    malicious IPs or domains</li>
+                <li><strong>Look for C2 communication:</strong> Regular beaconing patterns or 
+                    encrypted traffic to unusual destinations</li>
+                <li><strong>Check for data exfiltration:</strong> Large outbound transfers or 
+                    uploads to external sites</li>
+            </ol>
+
+            <h2>Best Practices</h2>
+            <ul>
+                <li><strong>Capture filters:</strong> Use capture filters to reduce file size and 
+                    focus on relevant traffic</li>
+                <li><strong>Time frames:</strong> Limit capture duration to relevant time periods</li>
+                <li><strong>Save captures:</strong> Always save important captures for further 
+                    analysis and evidence</li>
+                <li><strong>Proper authorization:</strong> Only capture traffic on networks you're 
+                    authorized to monitor</li>
+                <li><strong>Privacy considerations:</strong> Be aware that packet captures may 
+                    contain sensitive information</li>
+                <li><strong>Regular practice:</strong> Familiarize yourself with normal network 
+                    patterns to better spot anomalies</li>
+            </ul>
+
+            <h2>Additional Tools</h2>
+            <p>Complement Wireshark with other network analysis tools:</p>
+            <ul>
+                <li><strong>tcpdump:</strong> Command-line packet analyzer</li>
+                <li><strong>NetworkMiner:</strong> Network forensic analysis tool</li>
+                <li><strong>Zeek (formerly Bro):</strong> Network security monitoring framework</li>
+                <li><strong>Suricata:</strong> IDS/IPS and network security monitoring engine</li>
+            </ul>
+
+            <h2>Conclusion</h2>
+            <p>
+                Network traffic analysis with Wireshark is an invaluable skill for cybersecurity 
+                professionals. By understanding how to capture, filter, and analyze network packets, 
+                you can detect security incidents, investigate breaches, and gain deep insights into 
+                network behavior. Practice regularly with various types of traffic to build your 
+                expertise and develop an intuition for spotting anomalies.
+            </p>
+
+            <p>
+                Remember that with great power comes great responsibility. Always ensure you have 
+                proper authorization before capturing network traffic, and handle captured data with 
+                appropriate care to protect privacy and comply with regulations.
+            </p>
+
+            <div class="view-all">
+                <a href="../blogs.html" class="btn">← Back to All Posts</a>
+            </div>
+        </article>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 RD-Tarun. All rights reserved.</p>
+            <p>Cybersecurity Research & Analysis</p>
+        </div>
+    </footer>
+</body>
+</html>

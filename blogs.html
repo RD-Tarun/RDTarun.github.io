@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="All blog posts on Cybersecurity, Malware Analysis, and Network Traffic Analysis">
+    <title>All Blogs | RD-Tarun</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="container">
+                <h1 class="logo">RD-Tarun</h1>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="blogs.html" class="active">Blogs</a></li>
+                    <li><a href="about.html">About</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container">
+                <h2>All Blog Posts</h2>
+                <p>Explore my writings on cybersecurity, malware analysis, and network traffic analysis</p>
+            </div>
+        </section>
+
+        <section class="blog-list">
+            <div class="container">
+                <div class="blog-filters">
+                    <button class="filter-btn active" data-filter="all">All Posts</button>
+                    <button class="filter-btn" data-filter="cybersecurity">Cybersecurity</button>
+                    <button class="filter-btn" data-filter="malware">Malware Analysis</button>
+                    <button class="filter-btn" data-filter="network">Network Analysis</button>
+                </div>
+
+                <div class="posts-grid">
+                    <article class="post-card" data-category="cybersecurity">
+                        <div class="post-meta">
+                            <span class="category cybersecurity">Cybersecurity</span>
+                            <span class="date">Dec 2024</span>
+                        </div>
+                        <h4><a href="posts/understanding-sql-injection.html">Understanding SQL Injection Attacks</a></h4>
+                        <p>A comprehensive guide to SQL injection vulnerabilities, how they work, and how to prevent them in modern web applications.</p>
+                    </article>
+
+                    <article class="post-card" data-category="malware">
+                        <div class="post-meta">
+                            <span class="category malware">Malware Analysis</span>
+                            <span class="date">Nov 2024</span>
+                        </div>
+                        <h4><a href="posts/ransomware-analysis.html">Analyzing Modern Ransomware Techniques</a></h4>
+                        <p>Exploring the latest ransomware variants, their encryption methods, and behavioral patterns in a controlled environment.</p>
+                    </article>
+
+                    <article class="post-card" data-category="network">
+                        <div class="post-meta">
+                            <span class="category network">Network Analysis</span>
+                            <span class="date">Nov 2024</span>
+                        </div>
+                        <h4><a href="posts/wireshark-analysis.html">Network Traffic Analysis with Wireshark</a></h4>
+                        <p>Learn how to capture and analyze network packets to identify suspicious activities and potential security breaches.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 RD-Tarun. All rights reserved.</p>
+            <p>Cybersecurity Research & Analysis</p>
+        </div>
+    </footer>
+
+    <script>
+        // Simple filter functionality
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const posts = document.querySelectorAll('.post-card');
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Remove active class from all buttons
+                filterBtns.forEach(b => b.classList.remove('active'));
+                // Add active class to clicked button
+                btn.classList.add('active');
+
+                const filter = btn.getAttribute('data-filter');
+
+                posts.forEach(post => {
+                    if (filter === 'all' || post.getAttribute('data-category') === filter) {
+                        post.style.display = 'block';
+                    } else {
+                        post.style.display = 'none';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
